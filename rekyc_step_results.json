@@ -1,0 +1,134 @@
+[
+  {
+    "step": 1,
+    "name": "Open ReKYC Login Page",
+    "status": "PASS",
+    "reason": ""
+  },
+  {
+    "step": 2,
+    "name": "Enter UCC: 63832650",
+    "status": "PASS",
+    "reason": ""
+  },
+  {
+    "step": 3,
+    "name": "Click DOB Field",
+    "status": "PASS",
+    "reason": ""
+  },
+  {
+    "step": 4,
+    "name": "Select DOB",
+    "status": "PASS",
+    "reason": ""
+  },
+  {
+    "step": 5,
+    "name": "Submit Login",
+    "status": "PASS",
+    "reason": ""
+  },
+  {
+    "step": 6,
+    "name": "Verify OTP Page",
+    "status": "PASS",
+    "reason": ""
+  },
+  {
+    "step": 7,
+    "name": "Fetch OTP",
+    "status": "PASS",
+    "reason": ""
+  },
+  {
+    "step": 8,
+    "name": "Submit OTP",
+    "status": "PASS",
+    "reason": ""
+  },
+  {
+    "step": 9,
+    "name": "Dashboard Check",
+    "status": "PASS",
+    "reason": ""
+  },
+  {
+    "step": 10,
+    "name": "Email Section",
+    "status": "PASS",
+    "reason": ""
+  },
+  {
+    "step": 11,
+    "name": "Mobile Section",
+    "status": "PASS",
+    "reason": ""
+  },
+  {
+    "step": 12,
+    "name": "Address Section",
+    "status": "PASS",
+    "reason": ""
+  },
+  {
+    "step": 13,
+    "name": "Nominee Section",
+    "status": "PASS",
+    "reason": ""
+  },
+  {
+    "step": 14,
+    "name": "Bank Section",
+    "status": "PASS",
+    "reason": ""
+  },
+  {
+    "step": 15,
+    "name": "Segment Section",
+    "status": "PASS",
+    "reason": ""
+  },
+  {
+    "step": 16,
+    "name": "Income Declaration",
+    "status": "PASS",
+    "reason": ""
+  },
+  {
+    "step": 17,
+    "name": "Dis Slip Req",
+    "status": "PASS",
+    "reason": ""
+  },
+  {
+    "step": 18,
+    "name": "Service Status",
+    "status": "PASS",
+    "reason": ""
+  },
+  {
+    "step": 19,
+    "name": "Documents",
+    "status": "PASS",
+    "reason": ""
+  },
+  {
+    "step": 20,
+    "name": "View Proof 1",
+    "status": "PASS",
+    "reason": ""
+  },
+  {
+    "step": 21,
+    "name": "View Proof 2",
+    "status": "PASS",
+    "reason": ""
+  },
+  {
+    "step": 22,
+    "name": "DDPI Section",
+    "status": "PASS",
+    "reason": ""
+  }
+]

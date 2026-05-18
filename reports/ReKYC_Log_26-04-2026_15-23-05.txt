@@ -1,0 +1,49 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.4, pytest-9.0.3, pluggy-1.6.0 -- C:\Users\Miruthula\AppData\Local\Python\pythoncore-3.14-64\python.exe
+cachedir: .pytest_cache
+metadata: {'Python': '3.14.4', 'Platform': 'Windows-11-10.0.26200-SP0', 'Packages': {'pytest': '9.0.3', 'pluggy': '1.6.0'}, 'Plugins': {'base-url': '2.1.0', 'html': '4.2.0', 'metadata': '3.1.1', 'playwright': '0.7.2'}, 'Base URL': ''}
+rootdir: C:\Users\Miruthula\Desktop\ReKYC_Test
+plugins: base-url-2.1.0, html-4.2.0, metadata-3.1.1, playwright-0.7.2
+collecting ... collected 1 item
+
+tests/ReKYC_Test.py::TestReKYC::test_rekyc_flow[chromium]  Step 1 PASSED: Open ReKYC Login Page
+ UCC filled using: input[placeholder='ucc']
+ Step 2 PASSED: Enter UCC: 63832650
+ DOB field clicked using: input[placeholder='DOB : DD/MM/YYYY']
+ Step 3 PASSED: Click DOB Field to Open Calendar
+ Year 2003 selected!
+ Month 0 selected!
+ Found 59 available date cells
+ Day 21 clicked!
+ Step 4 PASSED: Select DOB: 21/0/2003
+ Attempt 1: Opening YopMail...
+ Refreshing YopMail inbox...
+ Found 1 OTP elements with: //p[contains(text(),'Your OTP')]
+ OTP line found: 
+                Your OTP to login our Support Portal is 848
+ OTP Extracted: 848493
+ OTP 848493 entered successfully!
+ Step 7 PASSED: Get OTP from YopMail and Enter
+ Step 7 PASSED: Submit OTP
+ Step 8 FAILED: Verify Dashboard Loaded After Login
+ Reason: Dashboard not loaded! URL: https://rekyc.navia.co.in/login.php
+assert ('index.php' in 'https://rekyc.navia.co.in/login.php' or 'dashboard' in 'https://rekyc.navia.co.in/login.php')
+ +  where 'https://rekyc.navia.co.in/login.php' = <Page url='https://rekyc.navia.co.in/login.php'>.url
+ +  and   'https://rekyc.navia.co.in/login.php' = <Page url='https://rekyc.navia.co.in/login.php'>.url
+FAILED
+
+================================== FAILURES ===================================
+_____________________ TestReKYC.test_rekyc_flow[chromium] _____________________
+tests\ReKYC_Test.py:306: in test_rekyc_flow
+    run_step(8, "Verify Dashboard Loaded After Login", step7)
+tests\ReKYC_Test.py:18: in run_step
+    action()
+tests\ReKYC_Test.py:303: in step7
+    assert "index.php" in page.url or "dashboard" in page.url, \
+E   AssertionError: Dashboard not loaded! URL: https://rekyc.navia.co.in/login.php
+E   assert ('index.php' in 'https://rekyc.navia.co.in/login.php' or 'dashboard' in 'https://rekyc.navia.co.in/login.php')
+E    +  where 'https://rekyc.navia.co.in/login.php' = <Page url='https://rekyc.navia.co.in/login.php'>.url
+E    +  and   'https://rekyc.navia.co.in/login.php' = <Page url='https://rekyc.navia.co.in/login.php'>.url
+=========================== short test summary info ===========================
+FAILED tests/ReKYC_Test.py::TestReKYC::test_rekyc_flow[chromium] - AssertionE...
+======================== 1 failed in 65.64s (0:01:05) =========================

@@ -1,0 +1,77 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.4, pytest-9.0.3, pluggy-1.6.0 -- C:\Users\Miruthula\AppData\Local\Python\pythoncore-3.14-64\python.exe
+cachedir: .pytest_cache
+metadata: {'Python': '3.14.4', 'Platform': 'Windows-11-10.0.26200-SP0', 'Packages': {'pytest': '9.0.3', 'pluggy': '1.6.0'}, 'Plugins': {'base-url': '2.1.0', 'html': '4.2.0', 'metadata': '3.1.1', 'playwright': '0.7.2'}, 'Base URL': ''}
+rootdir: C:\Users\Miruthula\Desktop\ReKYC_Test
+plugins: base-url-2.1.0, html-4.2.0, metadata-3.1.1, playwright-0.7.2
+collecting ... collected 1 item
+
+tests/ReKYC_Test.py::TestReKYC::test_rekyc_flow[chromium] FAILED         [100%]
+
+================================== FAILURES ===================================
+_____________________ TestReKYC.test_rekyc_flow[chromium] _____________________
+
+self = <ReKYC_Test.TestReKYC object at 0x0000026B6F870E10>
+page = <Page url='https://rekyc.navia.co.in/login.php'>
+
+    def test_rekyc_flow(self, page: Page):
+    
+        step_results.clear()
+    
+        # \u2500\u2500 STEP 1: Open ReKYC Website \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+        def step1():
+            page.goto(REKYC_URL)
+            page.wait_for_timeout(3000)
+>       run_step(1, "Open ReKYC Login Page", step1)
+
+tests\ReKYC_Test.py:56: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\ReKYC_Test.py:21: in run_step
+    action()
+tests\ReKYC_Test.py:54: in step1
+    page.goto(REKYC_URL)
+..\..\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\playwright\sync_api\_generated.py:9054: in goto
+    self._sync(
+..\..\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\playwright\_impl\_page.py:552: in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\playwright\_impl\_frame.py:153: in goto
+    await self._channel.send(
+..\..\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\playwright\_impl\_connection.py:69: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <playwright._impl._connection.Connection object at 0x0000026B6F856120>
+cb = <function Channel.send.<locals>.<lambda> at 0x0000026B6FB05590>
+is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        st: List[inspect.FrameInfo] = getattr(
+            task, "__pw_stack__", None
+        ) or inspect.stack(0)
+    
+        parsed_st = _extract_stack_trace_information_from_stack(st, is_internal, title)
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.TargetClosedError: Page.goto: Target page, context or browser has been closed
+E           Call log:
+E             - navigating to "https://rekyc.navia.co.in/login.php", waiting until "load"
+
+..\..\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\playwright\_impl\_connection.py:559: TargetClosedError
+---------------------------- Captured stdout call -----------------------------
+ Step 1 FAILED: Open ReKYC Login Page
+ Reason: Page.goto: Target page, context or browser has been closed
+Call log:
+  - navigating to "https://rekyc.navia.co.in/login.php", waiting until "load"
+
+=========================== short test summary info ===========================
+FAILED tests/ReKYC_Test.py::TestReKYC::test_rekyc_flow[chromium] - playwright...
+============================== 1 failed in 8.67s ==============================

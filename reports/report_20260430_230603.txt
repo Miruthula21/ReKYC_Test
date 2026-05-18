@@ -1,0 +1,283 @@
+OUTPUT:
+============================= test session starts =============================
+platform win32 -- Python 3.14.4, pytest-9.0.3, pluggy-1.6.0
+rootdir: C:\Users\Miruthula\Desktop\ReKYC_Test
+plugins: base-url-2.1.0, html-4.2.0, metadata-3.1.1, playwright-0.7.2
+collected 1 item
+
+tests\ReKYC_Test.py F                                                    [100%]
+
+================================== FAILURES ===================================
+_____________________ TestReKYC.test_rekyc_flow[chromium] _____________________
+
+self = <ReKYC_Test.TestReKYC object at 0x000001D2CE780F50>
+page = <Page url='https://rekyc.navia.co.in/verify_otp.php?form=dXNlcmxvZ2lubGE%3D'>
+
+    def test_rekyc_flow(self, page: Page):
+    
+        step_results.clear()
+    
+        # \u2500\u2500 STEP 1: Open ReKYC Website \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+        def step1():
+            page.goto(REKYC_URL)
+            page.wait_for_timeout(3000)
+        run_step(1, "Open ReKYC Login Page", step1)
+    
+        # \u2500\u2500 STEP 2: Enter UCC \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+        def step2():
+            ucc_locators = [
+                "input[placeholder='ucc']",
+                "input[placeholder='UCC']",
+                "//input[@name='ucc']",
+                "//input[@id='ucc']",
+            ]
+            filled = False
+            for loc in ucc_locators:
+                try:
+                    field = page.locator(loc).first
+                    if field.is_visible(timeout=3000):
+                        field.fill(REKYC_UCC)
+                        filled = True
+                        print(f" UCC filled using: {loc}")
+                        break
+                except:
+                    continue
+            if not filled:
+                raise Exception("UCC input field not found!")
+        run_step(2, f"Enter UCC: {REKYC_UCC}", step2)
+        # \u2500\u2500 STEP 3: Click DOB Field \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+        def step3():
+            dob_locators = [
+                "input[placeholder='DOB : DD/MM/YYYY']",
+                "//input[@placeholder='DOB : DD/MM/YYYY']",
+                "//input[@name='dob']",
+                "//input[@id='dob']",
+            ]
+            for loc in dob_locators:
+                try:
+                    field = page.locator(loc).first
+                    if field.is_visible(timeout=3000):
+                        field.click()
+                        print(f" DOB field clicked using: {loc}")
+                        page.wait_for_timeout(1000)
+                        break
+                except:
+                    continue
+        run_step(3, "Click DOB Field to Open Calendar", step3)
+    
+        # \u2500\u2500 STEP 4: Select DOB from Calendar \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+        def step4():
+            page.wait_for_timeout(2000)
+    
+            # Select Year
+            page.locator(".yearselect").first.select_option(value=DOB_YEAR)
+            print(f" Year {DOB_YEAR} selected!")
+    
+            # Select Month (0=Jan, 1=Feb...)
+            page.locator(".monthselect").first.select_option(value=DOB_MONTH)
+            print(f" Month {DOB_MONTH} selected!")
+    
+            # Click Day
+            day_number = str(int(DOB_DAY))
+            clicked    = False
+            all_dates  = page.locator("td.available:not(.off):not(.disabled)")
+            count      = all_dates.count()
+            print(f" Found {count} available date cells")
+    
+            for i in range(count):
+                cell = all_dates.nth(i)
+                if cell.text_content().strip() == day_number:
+                    cell.click()
+                    clicked = True
+                    print(f" Day {day_number} clicked!")
+                    page.wait_for_timeout(1000)
+                    break
+    
+            if not clicked:
+                raise Exception(f"Day {day_number} not found in calendar!")
+    
+        run_step(4, f"Select DOB: {DOB_DAY}/{DOB_MONTH}/{DOB_YEAR}", step4)
+    
+        # \u2500\u2500 STEP 5: Click Login Submit Button \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+        def step5():
+            page.locator("#submitform").click()
+            print(" Please solve the CAPTCHA in the browser window...")
+            page.wait_for_timeout(20000)
+        run_step(5, "Click Login Submit Button", step5)
+    
+        # \u2500\u2500 STEP 6: Verify OTP Page \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+        def step6():
+            page.wait_for_timeout(2000)
+            current_url = page.url
+            print(f" OTP Page URL: {current_url}")
+            assert "verify_otp" in current_url or "otp" in current_url.lower(), \
+                f"OTP page not loaded! URL: {current_url}"
+            print(" OTP Page loaded!")
+        run_step(6, "Verify OTP Page Loaded", step6)
+    
+        # \u2500\u2500 STEP 7: Get OTP from YopMail \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+        def step7():
+            new_page = page.context.new_page()
+            new_page.set_default_timeout(60000)
+    
+            # Open YopMail
+            for attempt in range(3):
+                try:
+                    print(f" Attempt {attempt+1}: Opening YopMail...")
+                    new_page.goto(
+                        "https://yopmail.com/en",
+                        timeout=60000,
+                        wait_until="domcontentloaded"
+                    )
+                    new_page.wait_for_timeout(3000)
+                    break
+                except:
+                    print(f" Attempt {attempt+1} failed")
+                    if attempt == 2:
+                        raise Exception("YopMail not loading!")
+                    new_page.wait_for_timeout(3000)
+    
+            # Enter inbox name
+            inbox_name = REKYC_YOPMAIL.split("@")[0]
+            new_page.locator("input[id='login']").fill(inbox_name)
+            new_page.wait_for_timeout(1000)
+            new_page.keyboard.press("Enter")
+            new_page.wait_for_timeout(7000)
+    
+            # Refresh inbox
+            new_page.locator("#refresh").click()
+            print(" Refreshing YopMail inbox...")
+            new_page.wait_for_timeout(7000)
+    
+            # \u2500\u2500 Click the FIRST/LATEST email in inbox \u2500\u2500
+            # This gets the most recent OTP email
+            try:
+                first_email = new_page.locator(
+                    ".lms div.m"
+                ).first
+                if first_email.is_visible(timeout=5000):
+                    first_email.click()
+                    new_page.wait_for_timeout(3000)
+                    print(" Clicked latest email!")
+            except:
+                print(" Could not click email row, reading current mail...")
+    
+            # \u2500\u2500 Read OTP from email body \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+            frame = new_page.frame_locator("#ifmail")
+            otp   = None
+    
+            # Get full email text
+            try:
+                full_text = frame.locator("body").text_content(timeout=10000)
+                # Remove all non-ascii characters
+                full_text = full_text.encode("ascii", "ignore").decode("ascii")
+                print(f" Email content preview: {full_text[:100]}")
+    
+                # Find exactly 6 consecutive digits
+                matches = re.findall(r'\b\d{6}\b', full_text)
+                if matches:
+                    otp = matches[0]
+                    print(f" OTP Found: {otp}")
+            except Exception as e:
+                print(f" Error reading email: {e}")
+    
+            new_page.close()
+    
+            if not otp:
+                raise Exception(
+                    "OTP not found! Check YopMail inbox manually."
+                )
+    
+            # \u2500\u2500 Enter OTP in page \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+            page.bring_to_front()
+            page.wait_for_timeout(1000)
+    
+            otp_entered = False
+            for loc in [
+                "input[placeholder='Enter OTP']",
+                "//input[@placeholder='Enter OTP']",
+                "//input[@name='otp']",
+                "//input[@id='otp']",
+                "//input[@type='text']",
+                "//input[@type='number']",
+            ]:
+                try:
+                    field = page.locator(loc).first
+                    if field.is_visible(timeout=3000):
+                        field.clear()
+                        field.fill(otp)
+                        otp_entered = True
+                        print(f" OTP {otp} entered!")
+                        break
+                except:
+                    continue
+    
+            if not otp_entered:
+                raise Exception("OTP input field not found!")
+            page.wait_for_timeout(1000)
+    
+>       run_step(7, "Get OTP from YopMail and Enter", step7)
+
+tests\ReKYC_Test.py:251: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\ReKYC_Test.py:21: in run_step
+    action()
+tests\ReKYC_Test.py:177: in step7
+    new_page.wait_for_timeout(7000)
+..\..\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\playwright\sync_api\_generated.py:11536: in wait_for_timeout
+    self._sync(self._impl_obj.wait_for_timeout(timeout=timeout))
+..\..\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\playwright\_impl\_page.py:1101: in wait_for_timeout
+    await self._main_frame.wait_for_timeout(timeout)
+..\..\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\playwright\_impl\_frame.py:862: in wait_for_timeout
+    await self._channel.send("waitForTimeout", None, {"waitTimeout": timeout})
+..\..\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\playwright\_impl\_connection.py:69: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <playwright._impl._connection.Connection object at 0x000001D2CE766510>
+cb = <function Channel.send.<locals>.<lambda> at 0x000001D2CEC1C1A0>
+is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        st: List[inspect.FrameInfo] = getattr(
+            task, "__pw_stack__", None
+        ) or inspect.stack(0)
+    
+        parsed_st = _extract_stack_trace_information_from_stack(st, is_internal, title)
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.TargetClosedError: Page.wait_for_timeout: Target page, context or browser has been closed
+
+..\..\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\playwright\_impl\_connection.py:559: TargetClosedError
+---------------------------- Captured stdout call -----------------------------
+ Step 1 PASSED: Open ReKYC Login Page
+ UCC filled using: input[placeholder='ucc']
+ Step 2 PASSED: Enter UCC: 63832650
+ DOB field clicked using: input[placeholder='DOB : DD/MM/YYYY']
+ Step 3 PASSED: Click DOB Field to Open Calendar
+ Year 2003 selected!
+ Month 0 selected!
+ Found 59 available date cells
+ Day 21 clicked!
+ Step 4 PASSED: Select DOB: 21/0/2003
+ Please solve the CAPTCHA in the browser window...
+ Step 5 PASSED: Click Login Submit Button
+ OTP Page URL: https://rekyc.navia.co.in/verify_otp.php?form=dXNlcmxvZ2lubGE%3D
+ OTP Page loaded!
+ Step 6 PASSED: Verify OTP Page Loaded
+ Attempt 1: Opening YopMail...
+ Step 7 FAILED: Get OTP from YopMail and Enter
+ Reason: Page.wait_for_timeout: Target page, context or browser has been closed
+=========================== short test summary info ===========================
+FAILED tests/ReKYC_Test.py::TestReKYC::test_rekyc_flow[chromium] - playwright...
+======================== 1 failed in 67.12s (0:01:07) =========================
+
+ERROR:

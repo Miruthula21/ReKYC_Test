@@ -1,0 +1,1 @@
+[{"step": 1, "name": "Open Web Login Page", "status": "PASS", "reason": ""}, {"step": 2, "name": "Click Login with Client Code", "status": "FAIL", "reason": "Locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator(\"//button[text()='Login with client code']\")\n"}]

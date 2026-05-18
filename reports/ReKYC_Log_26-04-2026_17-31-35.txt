@@ -1,0 +1,44 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.4, pytest-9.0.3, pluggy-1.6.0 -- C:\Users\Miruthula\AppData\Local\Python\pythoncore-3.14-64\python.exe
+cachedir: .pytest_cache
+metadata: {'Python': '3.14.4', 'Platform': 'Windows-11-10.0.26200-SP0', 'Packages': {'pytest': '9.0.3', 'pluggy': '1.6.0'}, 'Plugins': {'base-url': '2.1.0', 'html': '4.2.0', 'metadata': '3.1.1', 'playwright': '0.7.2'}, 'Base URL': ''}
+rootdir: C:\Users\Miruthula\Desktop\ReKYC_Test
+plugins: base-url-2.1.0, html-4.2.0, metadata-3.1.1, playwright-0.7.2
+collecting ... collected 1 item
+
+tests/ReKYC_Test.py::TestReKYC::test_rekyc_flow[chromium]  Step 1 PASSED: Open ReKYC Login Page
+ UCC filled using: input[placeholder='ucc']
+ Step 2 PASSED: Enter UCC: 63832650
+ DOB field clicked using: input[placeholder='DOB : DD/MM/YYYY']
+ Step 3 PASSED: Click DOB Field to Open Calendar
+ Year 2003 selected!
+ Month 0 selected!
+ Found 59 available date cells
+ Day 21 clicked!
+ Step 4 PASSED: Select DOB: 21/0/2003
+ Submit clicked using: #submitform
+ URL after login submit: https://rekyc.navia.co.in/login.php
+ Step 5 PASSED: Click Login Submit Button
+ OTP Page URL: https://rekyc.navia.co.in/login.php
+ Step 6 FAILED: Verify OTP Page Loaded
+ Reason: OTP page not loaded! URL: https://rekyc.navia.co.in/login.php
+assert ('verify_otp' in 'https://rekyc.navia.co.in/login.php' or 'otp' in 'https://rekyc.navia.co.in/login.php')
+ +  where 'https://rekyc.navia.co.in/login.php' = <built-in method lower of str object at 0x000001E0EEBA6240>()
+ +    where <built-in method lower of str object at 0x000001E0EEBA6240> = 'https://rekyc.navia.co.in/login.php'.lower
+FAILED
+
+================================== FAILURES ===================================
+_____________________ TestReKYC.test_rekyc_flow[chromium] _____________________
+tests\ReKYC_Test.py:156: in test_rekyc_flow
+    run_step(6, "Verify OTP Page Loaded", step6)
+tests\ReKYC_Test.py:18: in run_step
+    action()
+tests\ReKYC_Test.py:153: in step6
+    assert "verify_otp" in current_url or "otp" in current_url.lower(), \
+E   AssertionError: OTP page not loaded! URL: https://rekyc.navia.co.in/login.php
+E   assert ('verify_otp' in 'https://rekyc.navia.co.in/login.php' or 'otp' in 'https://rekyc.navia.co.in/login.php')
+E    +  where 'https://rekyc.navia.co.in/login.php' = <built-in method lower of str object at 0x000001E0EEBA6240>()
+E    +    where <built-in method lower of str object at 0x000001E0EEBA6240> = 'https://rekyc.navia.co.in/login.php'.lower
+=========================== short test summary info ===========================
+FAILED tests/ReKYC_Test.py::TestReKYC::test_rekyc_flow[chromium] - AssertionE...
+============================= 1 failed in 29.74s ==============================

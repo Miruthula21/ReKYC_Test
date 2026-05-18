@@ -1,0 +1,61 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.4, pytest-9.0.3, pluggy-1.6.0 -- C:\Users\Miruthula\AppData\Local\Python\pythoncore-3.14-64\python.exe
+cachedir: .pytest_cache
+metadata: {'Python': '3.14.4', 'Platform': 'Windows-11-10.0.26200-SP0', 'Packages': {'pytest': '9.0.3', 'pluggy': '1.6.0'}, 'Plugins': {'base-url': '2.1.0', 'html': '4.2.0', 'metadata': '3.1.1', 'playwright': '0.7.2'}, 'Base URL': ''}
+rootdir: C:\Users\Miruthula\Desktop\ReKYC_Test
+plugins: base-url-2.1.0, html-4.2.0, metadata-3.1.1, playwright-0.7.2
+collecting ... collected 1 item
+
+tests/ReKYC_Test.py::TestReKYC::test_rekyc_flow[chromium]  Step 1 PASSED: Open ReKYC Login Page
+ UCC filled using: input[placeholder='ucc']
+ Step 2 PASSED: Enter UCC: 63832650
+ DOB field clicked using: input[placeholder='DOB : DD/MM/YYYY']
+ Step 3 PASSED: Click DOB Field to Open Calendar
+ Year 2003 selected!
+ Month 0 selected!
+ Found 59 available date cells
+ Day 21 clicked!
+ Step 4 PASSED: Select DOB: 21/0/2003
+ Submit clicked using: #submitform
+ URL after login submit: https://rekyc.navia.co.in/verify_otp.php?form=dXNlcmxvZ2lubGE%3D
+ Step 5 PASSED: Click Login Submit Button
+ OTP Page URL: https://rekyc.navia.co.in/verify_otp.php?form=dXNlcmxvZ2lubGE%3D
+ OTP Page loaded!
+ Step 6 PASSED: Verify OTP Page Loaded
+ Attempt 1: Opening YopMail...
+ Refreshing YopMail inbox...
+ Email content preview: DeliverabilityReplyForwardPrintDeleteHtmlTextHeadersSourceDownloadOTP for Account ManagementNavia <u
+ OTP Found: 894464
+ OTP 894464 entered!
+ Step 7 PASSED: Get OTP from YopMail and Enter
+ OTP Submit clicked!
+ URL after OTP submit: https://rekyc.navia.co.in/index.php
+ Step 8 PASSED: Submit OTP
+ Dashboard URL: https://rekyc.navia.co.in/index.php
+ Dashboard loaded successfully!
+ Step 9 PASSED: Verify Dashboard Loaded
+ Step 10 PASSED: Click Email Section
+ Step 11 PASSED: Click Mobile No Section
+ Step 12 PASSED: Click Change of Address Section
+ Step 13 PASSED: Click Nominee Section
+ Step 14 PASSED: Click Bank Section
+ Step 15 PASSED: Click Segment Section
+ Step 16 PASSED: Click Income Declaration Section
+ Step 17 PASSED: Click Dis Slip Req Section
+ Step 18 PASSED: Click Service Status Section
+ Step 20 FAILED: Click View Proof for IBSPM7684H_Esigned.pdf
+ Reason: File not found: IBSPM7684H_Esigned.pdf
+FAILED
+
+================================== FAILURES ===================================
+_____________________ TestReKYC.test_rekyc_flow[chromium] _____________________
+tests\ReKYC_Test.py:377: in test_rekyc_flow
+    run_step(20, f"Click View Proof for {REKYC_PDF_FILE}", step20)
+tests\ReKYC_Test.py:18: in run_step
+    action()
+tests\ReKYC_Test.py:376: in step20
+    raise Exception(f"File not found: {REKYC_PDF_FILE}")
+E   Exception: File not found: IBSPM7684H_Esigned.pdf
+=========================== short test summary info ===========================
+FAILED tests/ReKYC_Test.py::TestReKYC::test_rekyc_flow[chromium] - Exception:...
+======================== 1 failed in 118.91s (0:01:58) ========================

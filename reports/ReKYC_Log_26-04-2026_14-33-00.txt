@@ -1,0 +1,42 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.4, pytest-9.0.3, pluggy-1.6.0 -- C:\Users\Miruthula\AppData\Local\Python\pythoncore-3.14-64\python.exe
+cachedir: .pytest_cache
+metadata: {'Python': '3.14.4', 'Platform': 'Windows-11-10.0.26200-SP0', 'Packages': {'pytest': '9.0.3', 'pluggy': '1.6.0'}, 'Plugins': {'base-url': '2.1.0', 'html': '4.2.0', 'metadata': '3.1.1', 'playwright': '0.7.2'}, 'Base URL': ''}
+rootdir: C:\Users\Miruthula\Desktop\ReKYC_Test
+plugins: base-url-2.1.0, html-4.2.0, metadata-3.1.1, playwright-0.7.2
+collecting ... collected 1 item
+
+tests/ReKYC_Test.py::TestReKYC::test_rekyc_flow[chromium]  Step 1 PASSED: Open ReKYC Login Page
+ Step 2 FAILED: Enter UCC: 63832650 | Reason: Locator.fill: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("input[placeholder='UCC']")
+
+FAILED
+
+================================== FAILURES ===================================
+_____________________ TestReKYC.test_rekyc_flow[chromium] _____________________
+tests\ReKYC_Test.py:52: in test_rekyc_flow
+    run_step(2, f"Enter UCC: {REKYC_UCC}", step2)
+tests\ReKYC_Test.py:17: in run_step
+    action()
+tests\ReKYC_Test.py:50: in step2
+    page.locator("input[placeholder='UCC']").fill(REKYC_UCC)
+..\..\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\playwright\sync_api\_generated.py:15983: in fill
+    self._sync(
+..\..\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\playwright\_impl\_locator.py:215: in fill
+    return await self._frame.fill(self._selector, strict=True, **params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\playwright\_impl\_frame.py:607: in fill
+    await self._fill(**locals_to_params(locals()))
+..\..\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\playwright\_impl\_frame.py:619: in _fill
+    await self._channel.send("fill", self._timeout, locals_to_params(locals()))
+..\..\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\playwright\_impl\_connection.py:69: in send
+    return await self._connection.wrap_api_call(
+..\..\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\playwright\_impl\_connection.py:559: in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E   playwright._impl._errors.TimeoutError: Locator.fill: Timeout 30000ms exceeded.
+E   Call log:
+E     - waiting for locator("input[placeholder='UCC']")
+=========================== short test summary info ===========================
+FAILED tests/ReKYC_Test.py::TestReKYC::test_rekyc_flow[chromium] - playwright...
+======================== 1 failed in 85.45s (0:01:25) =========================

@@ -1,0 +1,151 @@
+OUTPUT:
+============================= test session starts =============================
+platform win32 -- Python 3.14.4, pytest-9.0.3, pluggy-1.6.0
+rootdir: C:\Users\Miruthula\Desktop\ReKYC_Test
+plugins: base-url-2.1.0, html-4.2.0, metadata-3.1.1, playwright-0.7.2
+collected 1 item
+
+tests\ReKYC_Test.py F                                                    [100%]
+
+================================== FAILURES ===================================
+_____________________ TestReKYC.test_rekyc_flow[chromium] _____________________
+
+self = <ReKYC_Test.TestReKYC object at 0x00000233B6FF0F50>
+page = <Page url='https://rekyc.navia.co.in/login.php'>
+
+    def test_rekyc_flow(self, page: Page):
+    
+        step_results.clear()
+    
+        # \u2500\u2500 STEP 1: Open ReKYC Website \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+        def step1():
+            page.goto(REKYC_URL)
+            page.wait_for_timeout(3000)
+        run_step(1, "Open ReKYC Login Page", step1)
+    
+        # \u2500\u2500 STEP 2: Enter UCC \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+        def step2():
+            ucc_locators = [
+                "input[placeholder='ucc']",
+                "input[placeholder='UCC']",
+                "//input[@name='ucc']",
+                "//input[@id='ucc']",
+            ]
+            filled = False
+            for loc in ucc_locators:
+                try:
+                    field = page.locator(loc).first
+                    if field.is_visible(timeout=3000):
+                        field.fill(REKYC_UCC)
+                        filled = True
+                        print(f" UCC filled using: {loc}")
+                        break
+                except:
+                    continue
+            if not filled:
+                raise Exception("UCC input field not found!")
+        run_step(2, f"Enter UCC: {REKYC_UCC}", step2)
+        # \u2500\u2500 STEP 3: Click DOB Field \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+        def step3():
+            dob_locators = [
+                "input[placeholder='DOB : DD/MM/YYYY']",
+                "//input[@placeholder='DOB : DD/MM/YYYY']",
+                "//input[@name='dob']",
+                "//input[@id='dob']",
+            ]
+            for loc in dob_locators:
+                try:
+                    field = page.locator(loc).first
+                    if field.is_visible(timeout=3000):
+                        field.click()
+                        print(f" DOB field clicked using: {loc}")
+                        page.wait_for_timeout(1000)
+                        break
+                except:
+                    continue
+        run_step(3, "Click DOB Field to Open Calendar", step3)
+    
+        # \u2500\u2500 STEP 4: Select DOB from Calendar \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+        def step4():
+            page.wait_for_timeout(2000)
+    
+            # Select Year
+            page.locator(".yearselect").first.select_option(value=DOB_YEAR)
+            print(f" Year {DOB_YEAR} selected!")
+    
+            # Select Month (0=Jan, 1=Feb...)
+            page.locator(".monthselect").first.select_option(value=DOB_MONTH)
+            print(f" Month {DOB_MONTH} selected!")
+    
+            # Click Day
+            day_number = str(int(DOB_DAY))
+            clicked    = False
+            all_dates  = page.locator("td.available:not(.off):not(.disabled)")
+            count      = all_dates.count()
+            print(f" Found {count} available date cells")
+    
+            for i in range(count):
+                cell = all_dates.nth(i)
+                if cell.text_content().strip() == day_number:
+                    cell.click()
+                    clicked = True
+                    print(f" Day {day_number} clicked!")
+                    page.wait_for_timeout(1000)
+                    break
+    
+            if not clicked:
+                raise Exception(f"Day {day_number} not found in calendar!")
+    
+>       run_step(4, f"Select DOB: {DOB_DAY}/{DOB_MONTH}/{DOB_YEAR}", step4)
+
+tests\ReKYC_Test.py:131: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\ReKYC_Test.py:21: in run_step
+    action()
+tests\ReKYC_Test.py:102: in step4
+    page.wait_for_timeout(2000)
+..\..\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\playwright\sync_api\_generated.py:11536: in wait_for_timeout
+    self._sync(self._impl_obj.wait_for_timeout(timeout=timeout))
+..\..\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\playwright\_impl\_page.py:1101: in wait_for_timeout
+    await self._main_frame.wait_for_timeout(timeout)
+..\..\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\playwright\_impl\_frame.py:862: in wait_for_timeout
+    await self._channel.send("waitForTimeout", None, {"waitTimeout": timeout})
+..\..\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\playwright\_impl\_connection.py:69: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <playwright._impl._connection.Connection object at 0x00000233B6FD6510>
+cb = <function Channel.send.<locals>.<lambda> at 0x00000233B73A3C10>
+is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        st: List[inspect.FrameInfo] = getattr(
+            task, "__pw_stack__", None
+        ) or inspect.stack(0)
+    
+        parsed_st = _extract_stack_trace_information_from_stack(st, is_internal, title)
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.TargetClosedError: Page.wait_for_timeout: Target page, context or browser has been closed
+
+..\..\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\playwright\_impl\_connection.py:559: TargetClosedError
+---------------------------- Captured stdout call -----------------------------
+ Step 1 PASSED: Open ReKYC Login Page
+ UCC filled using: input[placeholder='ucc']
+ Step 2 PASSED: Enter UCC: 63832650
+ Step 3 PASSED: Click DOB Field to Open Calendar
+ Step 4 FAILED: Select DOB: 21/0/2003
+ Reason: Page.wait_for_timeout: Target page, context or browser has been closed
+=========================== short test summary info ===========================
+FAILED tests/ReKYC_Test.py::TestReKYC::test_rekyc_flow[chromium] - playwright...
+============================= 1 failed in 16.20s ==============================
+
+ERROR:
