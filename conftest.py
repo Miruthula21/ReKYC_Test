@@ -8,7 +8,7 @@ import pytest
 def browser_type_launch_args(browser_type_launch_args):
     return {
         **browser_type_launch_args,
-        "headless": True,
+        "headless": False,
         "slow_mo" : 1000,
     }
 
