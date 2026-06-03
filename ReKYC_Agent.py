@@ -12,6 +12,7 @@ from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from teams_reporter import send_teams_report
 
 
 class ReKYC_Agent:
@@ -167,8 +168,9 @@ class ReKYC_Agent:
 
         print("  [i] EMAIL TRIGGER STARTED")
 
-        sender = "miruthulak21@gmail.com"
-        password = "jbor rqbh eniq pkpw"
+        sender = "aialerts@navia.co.in"
+        username = "emailapikey"
+        password = "PHtE6r1eS7jqiG998kUH7afqRZKmN4gtrrw1KQQTt4sTDfJRS01U+d8qlTCwqU0sAPJCRqHKmY1p4rqb4e+Ed26/YW8ZDWqyqK3sx/VYSPOZsbq6x00auVwYdELbVIXqe9di0CzRst3YNA=="
         receiver = ["miruthulak21@gmail.com", "elamukil@navia.co.in"]
 
         step_html = ""
@@ -179,10 +181,10 @@ class ReKYC_Agent:
 
             step_html += f"""
             <tr style="background:{color}">
-                <td>{html.escape(str(step.get('step', '')))}</td>
-                <td>{icon} {html.escape(step_status)}</td>
-                <td>{html.escape(str(step.get('name', '')))}</td>
-                <td>{html.escape(str(step.get('reason', '')))}</td>
+                <td style="padding:10px;border:1px solid #d1d5db">{html.escape(str(step.get('step', '')))}</td>
+                <td style="padding:10px;border:1px solid #d1d5db;font-weight:700">{icon} {html.escape(step_status)}</td>
+                <td style="padding:10px;border:1px solid #d1d5db">{html.escape(str(step.get('name', '')))}</td>
+                <td style="padding:10px;border:1px solid #d1d5db">{html.escape(str(step.get('reason', '')))}</td>
             </tr>
             """
 
@@ -198,28 +200,36 @@ class ReKYC_Agent:
 
         email_html = f"""
         <html>
-        <body style="font-family:Arial">
-
-            <h2>Re-KYC Automation Report</h2>
-
-            <h3>&#129504; Code Review: {html.escape(code_review_status)}</h3>
-            <h3>&#129514; Test Execution: {html.escape(status)}</h3>
-            <h3>&#9201; Duration: {html.escape(duration)}</h3>
-
-            <h3>&#128202; Step Results</h3>
-            <table border="1" style="border-collapse:collapse;width:100%">
-                <tr style="background:#f3f4f6">
-                    <th>Step</th>
-                    <th>Status</th>
-                    <th>Name</th>
-                    <th>Reason</th>
-                </tr>
-                {step_html}
-            </table>
-
-            <p><b>Video Recording:</b> {video_line}</p>
-            {f"<p><b>Video File:</b> {safe_video_path}</p>" if video_path else ""}
-
+        <body style="margin:0;background:#f4f6f8;font-family:Arial,sans-serif;color:#111827">
+            <div style="max-width:1080px;margin:0 auto;padding:20px">
+                <div style="background:#ffffff;border:1px solid #e5e7eb">
+                    <div style="background:#1f3f68;color:#ffffff;padding:22px 24px">
+                        <div style="font-size:22px;font-weight:700">Re-KYC Automation Report</div>
+                        <div style="font-size:13px;margin-top:6px">Duration: {html.escape(duration)}</div>
+                    </div>
+                    <div style="padding:18px 24px 24px">
+                        <div style="font-size:14px;font-weight:700;margin-bottom:14px">
+                            Code Review: {html.escape(code_review_status)} &nbsp;|&nbsp; Test Execution:
+                            <span style="background:{'#dcfce7' if status == 'PASS' else '#fee2e2'};color:{'#047857' if status == 'PASS' else '#b91c1c'};padding:7px 18px;border-radius:5px">{html.escape(status)}</span>
+                        </div>
+                        <table style="border-collapse:collapse;width:100%;font-size:13px">
+                            <thead>
+                                <tr style="background:#344153;color:#ffffff;text-align:left">
+                                    <th style="padding:10px;border:1px solid #4b5563">Step</th>
+                                    <th style="padding:10px;border:1px solid #4b5563">Status</th>
+                                    <th style="padding:10px;border:1px solid #4b5563">Name</th>
+                                    <th style="padding:10px;border:1px solid #4b5563">Reason</th>
+                                </tr>
+                            </thead>
+                            <tbody>{step_html}</tbody>
+                        </table>
+                        <div style="font-size:12px;color:#4b5563;margin-top:14px">
+                            Video Recording: {video_line}
+                            {f"<br>Video File: {safe_video_path}" if video_path else ""}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </body>
         </html>
         """
@@ -233,8 +243,8 @@ class ReKYC_Agent:
         attached = self.attach_file(msg, video_path)
 
         try:
-            server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
-            server.login(sender, password)
+            server = smtplib.SMTP_SSL("smtp.zatpatmail.com", 465)
+            server.login(username, password)
             server.send_message(msg)
             server.quit()
 
@@ -243,6 +253,18 @@ class ReKYC_Agent:
                 print("  [OK] VIDEO ATTACHED:", video_path)
             else:
                 print("  [i] VIDEO NOT FOUND - EMAIL SENT WITHOUT VIDEO")
+            send_teams_report(
+                title=f"Re-KYC Automation Report - {status}",
+                status=status,
+                html_body=email_html,
+                video_path=video_path,
+                step_results=step_results,
+                duration=duration,
+                flow_details={
+                    "report_name": "Re-KYC Automation Report",
+                    "code_review": code_review_status,
+                },
+            )
 
         except Exception as e:
             print("  [ERROR] EMAIL FAILED:", e)
